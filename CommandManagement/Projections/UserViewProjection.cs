@@ -15,13 +15,14 @@ namespace CommandManagement.Projections
         private void Apply(UserView view, UserCreated @event)
         {
             view.Id = @event.Id;
+            view.IdCMS = @event.IdCMS;
             view.Data = @event.Data;
-            view.LastUpdatedTimeStamp = @event.LastUpdatedTimeStamp;
             view.Created = @event.Created;
         }
         private void Apply(UserView view, UserUpdated @event)
         {
             view.Id = @event.Id;
+            view.IdCMS = @event.IdCMS;
             view.Data = @event.Data;
             view.LastUpdatedTimeStamp = @event.LastUpdatedTimeStamp;
             view.Created = @event.Created;
@@ -29,6 +30,8 @@ namespace CommandManagement.Projections
         private void Apply(UserView view, UserDeleted @event)
         {
             view.Id = @event.Id;
+            view.IdCMS = @event.IdCMS;
+            view.Deleted = @event.Deleted;
             view.Data = @event.Data;
             view.LastUpdatedTimeStamp = @event.LastUpdatedTimeStamp;
             view.Created = @event.Created;

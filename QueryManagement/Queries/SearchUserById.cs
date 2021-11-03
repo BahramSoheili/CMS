@@ -1,14 +1,13 @@
 ﻿using Core.Queries;
-using System;
 namespace QueryManagement.Queries
 {
     public class SearchUserById: IQuery<User>
     {
-        public Guid Id { get; }
+        public int IdCMS { get; }
 
-        public SearchUserById(Guid id)
+        public SearchUserById(int idCMS)
         {
-            Id = id;
+            IdCMS = idCMS;
         }
     }
 }

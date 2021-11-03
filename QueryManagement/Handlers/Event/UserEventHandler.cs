@@ -22,14 +22,14 @@ namespace QueryManagement.Handlers.Events
         }
         public Task Handle(UserCreated @event, CancellationToken cancellationToken)
         {
-            var document = new User(@event.Id, @event.Data, @event.Created);
+            var document = new User(@event.Id, @event.IdCMS, @event.Data, @event.Created);
             return repository.Add(document, cancellationToken);
         }
-
         public Task Handle(UserUpdated @event, CancellationToken cancellationToken)
         {
             var document = repository.FindById(@event.Id, cancellationToken).Result;
-            document.Update(@event.Id,  @event.Data, @event.LastUpdatedTimeStamp, @event.Created);
+            document.Update(@event.Id, @event.IdCMS, @event.Data,
+                @event.LastUpdatedTimeStamp, @event.Created);
             return repository.Update(document, cancellationToken);
         }
         public Task Handle(UserDeleted @event, CancellationToken cancellationToken)

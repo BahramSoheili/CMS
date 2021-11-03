@@ -35,41 +35,68 @@ namespace Command.Api.Controllers
             return await sendUserCreate(command);             
             throw new Exception("Information is not valid.");
         }
-
         private async Task<IActionResult> sendUserCreate(UserInfo command)
         {
             var id = Guid.NewGuid();
-            var document = new CreateUser(id, command);
+            //var document = new CreateUser(id, 1, command); we might need it for the first time for avoiding empty table
+            var document = new CreateUser(id, GetIdCMS(), command);
             await _commandBus.Send(document);
             return Created("api/users", id);
-        }      
-       
-        [AllowAnonymous]
-        [HttpPut("{userId}")]
-        public async Task<IActionResult> Put(Guid userId, [FromBody] UserInfo command)
+        }
+        private int GetIdCMS() {
+            var max = GetMaxIdCMS();
+            return max++;
+        }   
+        private int GetMaxIdCMS()
         {
-            var user = GetUser(userId);
+            if (IsUserExist())
+            {
+                return _queryBus.Send<SearchUserMaxCMSId, int>
+                           (new SearchUserMaxCMSId()).Result;
+            }
+            else
+            {
+                return 1;
+            }            
+        }
+
+        private bool IsUserExist()
+        {
+            return _queryBus.Send<GetAllUsers, IReadOnlyCollection<UserView>>
+                                      (new GetAllUsers()).Result.Count > 0 ? true : false;
+        }
+
+        [AllowAnonymous]
+        [HttpPut("{idCMS}")]
+        public async Task<IActionResult> Put(int idCMS, [FromBody] UserInfo command)
+        {
+            var user = GetUser(idCMS);
             if (user != null)
             {              
-                var document = new UpdateUser(userId, command);
+                var document = new UpdateUser(user.Id, idCMS, command);
                 await _commandBus.Send(document);
                 return Ok();            
             }
             throw new Exception("user is not exist or user information is not valid.");
         }
         [AllowAnonymous]
-        private UserView GetUser(Guid Id)
+        private UserView GetUser(int idCMS)
         {
-            return _queryBus.Send<SearchUserById, UserView>
-                (new SearchUserById(Id)).Result;
+            return _queryBus.Send<SearchUserByCMSId, UserView>
+                (new SearchUserByCMSId(idCMS)).Result;
         }
 
         [AllowAnonymous]
         [HttpDelete("{userId}")]
-        public async Task<IActionResult> Delete(Guid userId)
+        public async Task<IActionResult> Delete(int idCMS)
         {
-            await _commandBus.Send(new DeleteUser(userId));
-            return Ok();
+            var user = GetUser(idCMS);
+            if (user != null)
+            {
+                await _commandBus.Send(new DeleteUser(user.Id));
+                return Ok();
+            }
+            throw new Exception("user is not exist or user information is not valid.");
         }
     }
 }

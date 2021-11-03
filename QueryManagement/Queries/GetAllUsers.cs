@@ -5,11 +5,8 @@ namespace QueryManagement.Queries
 {
     public class GetAllUsers : IQuery<IReadOnlyCollection<User>>
     {
-        public string Filter { get; }
-
-        public GetAllUsers(string filter)
+        public GetAllUsers()
         {
-            Filter = filter;
         }
     }
 }

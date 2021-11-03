@@ -23,7 +23,7 @@ namespace CommandManagement.Storage
 
         public Task<T> FindById(Guid id, CancellationToken cancellationToken)
         {
-            var res =  documentSession.Events.AggregateStreamAsync<T>(id);
+            var res = documentSession.Events.AggregateStreamAsync<T>(id);
             return res;
         }
         public Task Add(T aggregate, CancellationToken cancellationToken)
@@ -54,7 +54,7 @@ namespace CommandManagement.Storage
             catch (Exception e)
             {
             }
-           
+
         }
         public Task<T> Authenticate(string username, string password, CancellationToken cancellationToken)
         {
@@ -64,27 +64,24 @@ namespace CommandManagement.Storage
         {
             var res = documentSession.Query<T>().ToArray().ToList();
             return Task.FromResult(res);
-        }
-
-        //public Task<T> Search(Guid filter, CancellationToken cancellationToken)
-        //{
-        //    var res = documentSession.Events.AggregateStreamAsync<T>(filter);
-        //    return res;
-        //}
+        }       
         public async Task SearchAll(string filter, CancellationToken cancellationToken)
         {
             var res = documentSession.Events.FetchStream(filter);
-        }   
-        public Task<T> LockerByRowCol(Guid wallId, string row, string col, CancellationToken cancellationToken) 
+        }      
+        public Task<T> FindByCompanyId(int idCMS, CancellationToken cancellationToken)
         {
-            var res = documentSession.Query<T>("where data ->> 'Data.wallId' = 'wallId' && 'Data.rowNumber' = 'row' && 'Data.columnNumber' = 'col'").FirstOrDefault();
+            var res = documentSession.Query<T>("where data ->> 'IdCMS' = 'idCMS'").FirstOrDefault();
             return Task.FromResult(res);
         }
-
         public Task<List<T>> Search(string filter, CancellationToken cancellationToken)
         {
             var res = documentSession.Events.AggregateStreamAsync<List<T>>(filter);
             return res;
         }
+        public Task<List<T>> GetAll()
+        {
+            throw new NotImplementedException();
+        }    
     }
 }

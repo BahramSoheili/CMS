@@ -54,37 +54,26 @@ namespace QueryManagement.Storage
         {
             throw new NotImplementedException();
         }
-        public Task<List<T>> GetAll(CancellationToken cancellationToken)
+        public Task<List<T>> GetAll()
         {
-            //List<string> indexedList = new List<string>();
-            //var scanResults = elasticClient.Search<T>(s => s
-            //                .From(0)
-            //                .Size(MaxItemsCount)
-            //                .MatchAll()
-            //                //.Fields(f => f.Field(fi => fi.propertyName)) 
-            //                //I used field to get only the value which needed rather than getting the whole document
-            //                .SearchType(Elasticsearch.Net.SearchType.QueryThenFetch)
-            //                .Scroll("5m")
-            //            );
+            var scanResults = elasticClient.Search<T>(s => s
+                            .From(0)
+                            .Size(MaxItemsCount)
+                            .MatchAll()
+                            //.Fields(f => f.Field(fi => fi.propertyName)) 
+                            //I used field to get only the value which needed rather than getting the whole document
+                            .SearchType(Elasticsearch.Net.SearchType.QueryThenFetch)
+                            .Scroll("5m")
+                        );
 
-            //var results = elasticClient.Scroll<T>("10m", scanResults.ScrollId);
-            //while (results.Documents.Any())
-            //{
-            //    foreach (var doc in results.Fields)
-            //    {
-            //        indexedList.Add(doc.Value<string>("propertyName"));
-            //    }
-
-            //    results = elasticClient.Scroll<T>("10m", results.ScrollId);
-            //}
-            throw new NotImplementedException();
-
+            var results =  elasticClient.Scroll<T>("10m", scanResults.ScrollId);
+            var res =  results.Documents.ToList();
+            return Task.FromResult(res); 
         }
         public Task SearchAll(string filter, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
-
-       
+          
     }
 }

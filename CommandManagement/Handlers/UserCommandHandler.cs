@@ -23,21 +23,21 @@ namespace CommandManagement.Handlers
         }
         public async Task<Unit> Handle(CreateUser request, CancellationToken cancellationToken)
         {
-            var user = User.Create(request.Id, request.Data);
+            var user = User.Create(request.Id, request.IdCMS, request.Data);
             await repository.Add(user, cancellationToken);
             return Unit.Value;
         }
         public async Task<Unit> Handle(UpdateUser request, CancellationToken cancellationToken)
         {
             var user = await repository.FindById(request.Id, cancellationToken);
-            user.Update(request.Id, request.Data);
+            user.Update(request.Id, user.IdCMS, request.Data);
             await repository.Update(user, cancellationToken);
             return Unit.Value;
         }
         public async Task<Unit> Handle(DeleteUser request, CancellationToken cancellationToken)
         {
             var user = await repository.FindById(request.Id, cancellationToken);
-            user.Deleted(request.Id);
+            user.UpdateDeleted(request.Id, user.IdCMS, user.Data, user.Created);
             await repository.Update(user, cancellationToken);
             return Unit.Value;
         }      

@@ -8,14 +8,16 @@ namespace CommandManagement.Events
     {
         public UserInfo Data { get; }
 
-        public UserUpdated(Guid id, UserInfo data, DateTime lastUpdatedTimeStamp, DateTime created)
+        public UserUpdated(Guid id, int idCMS, UserInfo data, 
+            DateTime lastUpdatedTimeStamp, DateTime created)
         {
             Id = id;
+            IdCMS = idCMS;
             Data = data;
             LastUpdatedTimeStamp = lastUpdatedTimeStamp;
             Created = created;
         }
-        public static UserUpdated Create(Guid userId, UserInfo data,
+        public static UserUpdated Create(Guid userId, int idCMS, UserInfo data,
             DateTime lastUpdatedTimeStamp, DateTime created)
         {
             if (userId == default(Guid))
@@ -24,10 +26,7 @@ namespace CommandManagement.Events
                 throw new ArgumentException($"data can't be empty.");
             if (lastUpdatedTimeStamp == default(DateTime))
                 throw new ArgumentException($"{nameof(lastUpdatedTimeStamp)} needs to be defined.");
-            //if (created == default(DateTime))
-            //    throw new ArgumentException($"{nameof(created)} needs to be defined.");
-
-            return new UserUpdated(userId, data, lastUpdatedTimeStamp, created);
+            return new UserUpdated(userId, idCMS, data, lastUpdatedTimeStamp, created);
         }
     }
 }

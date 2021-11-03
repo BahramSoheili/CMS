@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
+using System;
 
 namespace CommandManagement
 {
@@ -23,17 +24,12 @@ namespace CommandManagement
         {
             services.AddMarten(config, options =>
             {
-                ConfigureMarten(options);
+                ConfigCommand.ConfigureMarten(options);
             });
             Url = config["url:index"];
             services.AddConfigCommand();
-        }
-     
-        public static void ConfigureMarten(StoreOptions options)
-        {
-            options.Events.InlineProjections.AggregateStreamsWith<User>();
-            options.Events.InlineProjections.Add<UserViewProjection>();
-        }
+        }       
+
         public static HttpContent ToJsonStringContent(object obj)
         {
             return new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");

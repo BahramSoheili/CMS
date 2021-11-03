@@ -6,12 +6,14 @@ namespace QueryManagement.Roles.Events.Created
 {
     internal class UserCreated : EventMetaData, IEvent
     {
-        public Guid UserId { get; }
         public UserInfo Data { get; }
-        public UserCreated(Guid userId, UserInfo data)
+        public UserCreated(Guid id, int idCMS, UserInfo data,
+            DateTime created)
         {
-            UserId = userId;
+            Id = id;
+            IdCMS = idCMS;
             Data = data;
+            Created = created;
         }
     }
 }

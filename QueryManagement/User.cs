@@ -12,16 +12,18 @@ namespace QueryManagement
         {
         }
         [JsonConstructor]
-        public User(Guid id, UserInfo data, DateTime created)
+        public User(Guid id, int idCMS, UserInfo data, DateTime created)
         {
             Id = id;
+            IdCMS = idCMS;
             Data = data;
             Created = created;
         }
-        public void Update(Guid id, UserInfo data,
+        public void Update(Guid id, int idCMS, UserInfo data,
             DateTime lastUpdatedTimeStamp, DateTime created)
         {
             Id = id;
+            IdCMS = idCMS;
             Data = data;
             LastUpdatedTimeStamp = lastUpdatedTimeStamp;
             Created = created;

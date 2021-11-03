@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Core.Queries;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Extensions;
 using Core.Storage;
-using System.Threading;
 using QueryManagement;
 using QueryManagement.Queries;
 
@@ -24,7 +18,7 @@ namespace Query.Api.Controllers
             _queryBus = queryBus;
         }         
         [HttpGet("{Id}")]
-        public Task<User> SearchById(Guid Id)
+        public Task<User> SearchById(int Id)
         {
             return _queryBus.Send<SearchUserById, User>(new SearchUserById(Id));
         }
@@ -32,7 +26,7 @@ namespace Query.Api.Controllers
         [Route("getAll/")]
         public Task<IReadOnlyCollection<User>> GetAll()
         {
-            return _queryBus.Send<SearchUsers, IReadOnlyCollection<User>>(new SearchUsers());
+            return _queryBus.Send<GetAllUsers, IReadOnlyCollection<User>>(new GetAllUsers());
         }
     }
 }

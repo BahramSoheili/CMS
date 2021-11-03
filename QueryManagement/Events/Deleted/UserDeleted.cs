@@ -4,24 +4,18 @@ using System;
 
 namespace QueryManagement.Roles.Events.Deleted
 {
-    public class UserDeleted : EventMetaData, IEvent
+    internal class UserDeleted : EventMetaData, IEvent
     {
-        public Guid UserId { get; }
         public UserInfo Data { get; }
-        public UserDeleted(Guid userId, UserInfo data)
+        public UserDeleted(Guid id, int idCMS, bool delted, UserInfo data,
+            DateTime lastUpdatedTimeStamp, DateTime created)
         {
-            UserId = userId;
+            Id = id;
+            IdCMS = idCMS;
+            Deleted = delted;
             Data = data;
-        }
-        public static UserDeleted Create(Guid userId, UserInfo data)
-        {
-            if (userId == default(Guid))
-                throw new ArgumentException($"{nameof(userId)} needs to be defined.");
-
-            if (data == null)
-                throw new ArgumentException($"Data can't be empty.");
-
-            return new UserDeleted(userId, data);
+            LastUpdatedTimeStamp = lastUpdatedTimeStamp;
+            Created = created;
         }
     }
 }
